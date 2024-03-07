@@ -9,6 +9,7 @@ const DashboardOverview = () => {
     totalUsers: 0,
     totalOrders: 0,
     totalRevenue: 0,
+    totalProducts:0
   });
 
   useEffect(() => {
@@ -18,9 +19,9 @@ const DashboardOverview = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get('http://192.168.0.230:8000/admin/dashboard');
-      const { totalUsers, totalOrders, totalRevenue } = response.data;
+      const { totalUsers, totalOrders, totalRevenue ,totalProducts} = response.data;
       const revenueTotal = totalRevenue.length > 0 ? totalRevenue[0].total : 0;
-      setDashboardData({ totalUsers, totalOrders, totalRevenue: revenueTotal });
+      setDashboardData({ totalUsers, totalOrders,totalProducts, totalRevenue: revenueTotal });
       
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -49,6 +50,11 @@ const DashboardOverview = () => {
         marginBottom: 10,
       }}>
         <Text>Total Orders: {dashboardData.totalOrders}</Text>
+      </View>
+      <View style={{
+        marginBottom: 10,
+      }}>
+        <Text>Total Products : {dashboardData.totalProducts}</Text>
       </View>
       <View style={{
         marginBottom: 10,

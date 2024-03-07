@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 
@@ -113,6 +114,7 @@ const UserDetails = ({ route }) => {
         </View>
       ) : (
         userDetails.orders.map((orders) => (
+          
           <View
             key={orders._id}
             style={{
@@ -126,7 +128,11 @@ const UserDetails = ({ route }) => {
               gap: 10,
             }}
           >
-            <View>
+          
+<View style={{display:"flex",flexDirection:"row",width:"100%",justifyContent:"space-between"}}>
+<Text></Text>
+<Text style={{fontSize:18}}>{new Date(orders.createdAt).toLocaleDateString()}</Text>
+</View>
               <Text>
                 {orders.products &&
                   orders.products.map((data, id) => (
@@ -165,17 +171,22 @@ const UserDetails = ({ route }) => {
                       >
                         paymentMethod :{orders.paymentMethod}
                       </Text>
+                      
                     </View>
                   ))}
               </Text>
-            </View>
+           
 
-            <Button
-              style={{ width: 100 }}
-              title="Delete"
-              onPress={() => handleDeleteOrder(orders._id)}
-              color="#dc3545"
-            />
+              <TouchableOpacity onPress={() => handleDeleteOrder(orders._id)}
+              style={{
+               backgroundColor: '#dc3546d2',
+               padding: 8,
+               borderRadius: 10,
+               width:100,
+               alignItems: 'center',}}
+              >
+              <Text style={{fontSize: 14,color:"#fff"}}>Delete</Text>
+              </TouchableOpacity>
           </View>
         ))
       )}
@@ -184,7 +195,7 @@ const UserDetails = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {display:"flex",justifyContent:"center",alignItems:"center",width:"100%",height: "100%",},
   userName: {},
   userEmail: {},
   orderContainer: {},

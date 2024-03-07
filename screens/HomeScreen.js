@@ -27,7 +27,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserType } from "../UserContext";
 import jwt_decode from "jwt-decode";
 
+
+
 const HomeScreen = () => {
+  
   const list = [
     {
       id: "0",
@@ -199,6 +202,7 @@ const HomeScreen = () => {
   ];
 
   const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -223,6 +227,18 @@ const HomeScreen = () => {
     };
 
     fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get("http://192.168.0.230:8000/products");
+        setProduct(response.data);
+      } catch (error) {
+        console.log("error message", error);
+      }
+    };
+
+    fetchProduct();
   }, []);
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(false);
@@ -410,6 +426,7 @@ const HomeScreen = () => {
                     size: item?.size,
                     oldPrice: item?.oldPrice,
                     item: item,
+
                   })
                 }
                 style={{
@@ -542,6 +559,54 @@ const HomeScreen = () => {
               .map((item, index) => (
                 <ProductItem item={item} key={index} />
               ))}
+          </View>
+          <View
+            style={{
+              flexDirection: "column",
+              
+              
+            }}
+          >
+            {product.map((item, index) => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("Info", {
+                    id: item.id,
+                    name: item.name,
+                    price: item?.price,
+                    carouselImages: item.carouselImages,
+                    color:item.color,
+                    size:item.Size,
+                    description :item?.description,
+
+                  })
+                }
+                style={{
+                  marginBottom: 20,
+                  padding: 10,
+                  backgroundColor: "#f0f0f0",
+                  borderRadius: 5,
+                  gap: 5,
+                  flexDirection: "row",
+                  justifyContent:"flex-start",
+                  
+
+                }}
+              >
+                <Image
+                  style={{ width: 150, height: 150, resizeMode: "contain" }}
+                  source={{ uri: item?.image }}
+                />
+                <View style={{flexDirection: "column",
+                marginTop:20,
+                justifyContent:"center",
+              }}>
+                <Text>{item?.name}</Text>
+                <Text>Price : ₹ {item?.price}</Text>
+                
+                </View>
+              </Pressable>
+            ))}
           </View>
           
         </ScrollView>

@@ -220,7 +220,7 @@ app.post("/orders", async (req, res) => {
       totalPrice: totalPrice,
       shippingAddress: shippingAddress,
       paymentMethod: paymentMethod,
-      status: "Processing",
+      status: "Order Confrimed",
     });
 
     await order.save();
@@ -268,11 +268,12 @@ app.get("/orders/:userId", async (req, res) => {
 app.get("/admin/dashboard", async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
+    const totalProducts = await User.countDocuments();
     const totalOrders = await Order.countDocuments();
     const totalRevenue = await Order.aggregate([
       { $group: { _id: null, total: { $sum: "$totalPrice" } } },
     ]);
-    res.status(200).json({ totalUsers, totalOrders, totalRevenue });
+    res.status(200).json({ totalUsers, totalOrders, totalRevenue ,totalProducts});
   } catch (error) {
     console.error("Error fetching admin dashboard data:", error);
     res.status(500).json({ message: "Error fetching admin dashboard data" });
@@ -404,15 +405,18 @@ app.get('/products/:productId', async (req, res) => {
 
 // Create a new product
 app.post('/products', async (req, res) => {
-  const { title, description, price, rating, imageUrl, carouselImages } = req.body;
+  const { title,name, description, price, rating, image, carouselImages,color,Size } = req.body;
   try {
     const newProduct = new Product({
       title,
+      name,
       description,
       price,
       rating,
-      imageUrl,
+      image,
       carouselImages,
+      color,
+      Size,
     });
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
@@ -452,6 +456,72 @@ app.delete('/products/:productId', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// Endpoint to fetch all orders
+app.get("/Allorders", async (req, res) => {
+  try {
+    // Fetch all orders from the database
+    const orders = await Order.find();
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.log("Error fetching orders:", error);
+    res.status(500).json({ message: "Error fetching orders" });
+  }
+});
+
+
+
+// Add endpoint to cancel an order
+// Update endpoint to cancel an order to handle DELETE requests
+app.delete("/orders/:orderId", async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    // Update order status to "Cancelled"
+    await Order.findByIdAndUpdate(orderId, { status: "Cancelled" });
+
+    // Send notification to user (you'll need to implement this)
+    // Example: sendNotification(orderId);
+
+    res.status(200).json({ message: "Order cancelled successfully" });
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+// Add endpoint to update order status
+app.put("/orders/:orderId/status", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    // Update order status
+    await Order.findByIdAndUpdate(orderId, { status });
+
+    res.status(200).json({ message: "Order status updated successfully" });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Add endpoint to get order statistics
+app.get("/orders/statistics", async (req, res) => {
+  try {
+    const { month } = req.query;
+    // Implement logic to get order statistics for the specified month
+    const ordersReceived = await Order.countDocuments({
+      createdAt: { $gte: new Date(month), $lt: new Date(month).setMonth(new Date(month).getMonth() + 1) }
+    });
+    const ordersCancelled = await Order.countDocuments({ status: "Cancelled", createdAt: { $gte: new Date(month), $lt: new Date(month).setMonth(new Date(month).getMonth() + 1) } });
+
+    res.status(200).json({ ordersReceived, ordersCancelled });
+  } catch (error) {
+    console.error("Error fetching order statistics:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 
 // Server listening

@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
@@ -17,7 +21,15 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    imageUrl: {
+    image: {
+        type: String,
+        required: true
+    },
+    color: {
+        type: String,
+        required: true
+    },
+    Size: {
         type: String,
         required: true
     },

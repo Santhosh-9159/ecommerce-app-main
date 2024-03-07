@@ -148,12 +148,13 @@ const ProductInfoScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "500" }}>
-          {route?.params?.title}
+          {route?.params?.name}
         </Text>
 
         <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 6 }}>
           ₹{route?.params?.price}
         </Text>
+
       </View>
 
       <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
@@ -170,7 +171,15 @@ const ProductInfoScreen = () => {
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
           {route?.params?.size}
         </Text>
+       
       </View>
+      <View style={{ flexDirection: "column",  padding: 10, }}>
+      <Text style={{justifyContent:"flex-start"}}>description: </Text>
+      <Text style={{ fontSize: 15, fontWeight: "bold",}}>
+        {route?.params?.description}
+      </Text>
+     
+    </View>
 
       <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
 

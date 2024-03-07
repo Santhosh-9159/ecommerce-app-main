@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, Button, Alert, StyleSheet } from 'react-native';
+import { View, FlatList, Text, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -63,34 +64,34 @@ const UserManagement = () => {
         }}
       >
       <View
-      style={{
-        paddingLeft: 10,
-        paddingRight: 10,
-        backgroundColor: "#33bbff",
-        borderRadius: 10,
-      }}
+     
     >
-      <Button
-        title="View"
-        onPress={() =>navigation.navigate("UserDetails",{userId:item._id})}
-        color="#33bbff"
-        style={{ paddingLeft: 10, paddingRight: 10 }}
-      />
+    <TouchableOpacity  onPress={() =>navigation.navigate("UserDetails",{userId:item._id})}
+    style={{
+     backgroundColor: '#33bbff',
+     padding: 8,
+     borderRadius: 10,
+     width:100,
+     alignItems: 'center',}}
+    >
+
+    <Text style={{fontSize: 14,color:"#fff"}}>View</Text>
+    </TouchableOpacity>
     </View>
         <View
-          style={{
-            paddingLeft: 10,
-            paddingRight: 10,
-            backgroundColor: "#dc3545",
-            borderRadius: 10,
-          }}
+         
         >
-          <Button
-            title="Delete"
-            onPress={() => confirmDeleteUser(item._id)}
-            color="#dc3545"
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-          />
+       <TouchableOpacity onPress={() => confirmDeleteUser(item._id)}
+       style={{
+        backgroundColor: '#dc3546d2',
+        padding: 8,
+        borderRadius: 10,
+        width:100,
+        alignItems: 'center',}}
+       >
+       <Text style={{fontSize: 14,color:"#fff"}}>Delete</Text>
+       </TouchableOpacity>
+      
         </View>
       </View>
     </View>

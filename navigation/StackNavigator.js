@@ -179,6 +179,7 @@ const StackNavigator = () => {
           component={DrawerNavigation}
           options={{ headerShown: false }}
         />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

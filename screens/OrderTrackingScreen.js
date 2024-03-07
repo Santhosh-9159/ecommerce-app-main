@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, ScrollView, Button } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, ScrollView, Button, Image } from 'react-native';
 import axios from 'axios';
 import { UserType } from '../UserContext';
 
@@ -52,19 +52,32 @@ const OrderTrackingScreen = ({ route }) => {
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <View style={{ marginBottom: 16 }}>
+
+            <Image
+            source={{ uri: item.image }}
+            style={{ width: 100, height: 100, resizeMode: "contain" }}
+          />
               <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
                 Order ID: {item._id}
               </Text>
+
+                
               <Text>Status: {item.status}</Text>
               {/* Display other order details as needed */}
               <Button
                 title="Track Order"
                 onPress={() => navigateToOrderTracking(item._id)}
               />
+              <View>
+              <Button title='Cancel Order '/>
+              </View>
+              
             </View>
           )}
         />
+        
       )}
+      
     </ScrollView>
   );
 };
